@@ -2,24 +2,19 @@
 #include "blink.h"
 #define onboard 13
 
-int ledPin = 12;  
+int ledPin = 12;
+int switch1 = 2;
 void setup() {
     pinMode(ledPin, OUTPUT);
+    pinMode(switch1, INPUT);
     Serial.begin(9600);
 }
 
 
 void loop() {
-  int dot = 200;
-  int dash = 400;
-    blink(ledPin, dot);
-    blink(ledPin,dot);
-    blink(ledPin,dot);
-    blink(ledPin,dash);
-    blink(ledPin,dash);
-    blink(ledPin,dash);
-    blink(ledPin,dot);
-    blink(ledPin,dot);
-    blink(ledPin,dot);
-    Serial.println("Loop complete");
+  if(digitalRead(switch1) == true){
+    digitalWrite(ledPin, HIGH);
+  } else{
+    digitalWrite(ledPin, LOW);
+  }
 }
