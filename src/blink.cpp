@@ -6,5 +6,5 @@ int dash = 400;
     digitalWrite(pin, HIGH);
     delay(ms);
     digitalWrite(pin, LOW);
-    delay(dash);
+    delay(ms);
 }
