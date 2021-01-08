@@ -1,34 +1,37 @@
 #include <Arduino.h>
 #include "blink.h"
-#define onboard 13
 
-int sensorPin = A0;
-int ledPin = 13;
-int sensorValue = 0; 
-unsigned int batteryCapacity = 50000;
-unsigned int batteryLevel = 0;
+int red = 11;
+int green = 10;
+int blue = 9;
  
-void PrintBatteryPercentage() {
-  Serial.print(((double)batteryLevel / (double)batteryCapacity)*100);
-  Serial.println("%");
-}
  
 void setup() {
-  pinMode(ledPin, OUTPUT);
-  Serial.begin(9600);
+  pinMode(red, OUTPUT);
+  pinMode(green, OUTPUT);
+  pinMode(blue, OUTPUT);
+ 
+}
+
+void rgbColor(int redValue, int greenValue, int blueValue ){
+
+  digitalWrite(red,redValue);
+  digitalWrite(green,greenValue);
+  digitalWrite(blue,blueValue);
+
 }
  
 void loop() {
-  sensorValue = analogRead(sensorPin); 
-  batteryLevel += sensorValue;
- 
-  if(batteryLevel >= batteryCapacity) {
-    Serial.println("FULLY CHARGED");
-    batteryLevel = batteryCapacity; 
-  }
-  else {
-    PrintBatteryPercentage();
-  }
- 
-  delay(50);
+  rgbColor(125, 0, 0); // Red
+  delay(500);
+  rgbColor(0, 125, 0); // Green
+  delay(500);
+  rgbColor(0, 0, 125); // Blue
+  delay(500);
+  rgbColor(0, 125, 125); // yellow
+  delay(500);
+  rgbColor(125, 0, 125); // purple
+  delay(500);
+  rgbColor(125, 125, 125); // white
+  delay(500);
 }
