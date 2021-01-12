@@ -1,11 +1,15 @@
 #include <Arduino.h>
 #include "blink.h"
+#include "display.h"
+#include "constants.h"
 
-int red = 11;
-int green = 10;
-int blue = 9;
+
+int red = 13;
+int green = 12;
+int blue = 11;
 int phRes = A0;
 float maxLight = 500.0;
+
  
  
 void setup() {
@@ -36,5 +40,8 @@ void colorShift(){
 
  
 void loop() {
-  colorShift();
+  for(int i = 0; i< 2200; i++){
+  delay(1000);
+    displayInt(i);
+  }
 }
