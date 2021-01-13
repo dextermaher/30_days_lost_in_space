@@ -1,40 +1,34 @@
 #include <Arduino.h>
-#include "blink.h"
-
-int red = 11;
-int green = 10;
-int blue = 9;
-int phRes = A0;
-float maxLight = 500.0;
+#include <Keypad.h>
  
+const byte ROWS = 4;
+const byte COLS = 4;
  
-void setup() {
-  pinMode(red, OUTPUT);
-  pinMode(green, OUTPUT);
-  pinMode(blue, OUTPUT);
-  Serial.begin(9600);
+char buttons[ROWS][COLS] = {
+  {'1', '2', '3', 'A'},
+  {'4', '5', '6', 'B'},
+  {'7', '8', '9', 'C'},
+  {'*', '0', '#', 'D'}
+};
  
+byte rowPins[ROWS] = {5, 4, 3, 2};
+byte colPins[COLS] = {6, 7, 8, 9};
+ 
+// Using the Keypad.h Library, we are going to define a custom keypad.
+// In order to do that, it needs to know the following:
+// What the keys are (a 2D Array of characters (char)),
+// what pins are being used (2 thru 9),
+// how many rows there are (4), and how many columns (4).
+Keypad customKeypad = Keypad(makeKeymap(buttons), rowPins, colPins, ROWS, COLS);
+ 
+void setup(){
+  Serial.begin(9600); // Begin monitoring via the serial monitor
 }
-
-void rgbColor(int redValue, int greenValue, int blueValue ){
-
-  analogWrite(red,redValue);
-  analogWrite(green,greenValue);
-  analogWrite(blue,blueValue);
-
-}
-
-void colorShift(){
-  float lightValue = analogRead(phRes);
-  float percentageOfLight = lightValue / maxLight;
-  int blueGlow = (int)(255 - percentageOfLight * 255);
-  int redGlow = (int)(255 - blueGlow);
-
-  rgbColor(redGlow, 255, blueGlow);
-  delay(30);
-}
-
  
-void loop() {
-  colorShift();
+void loop(){
+  char customKey = customKeypad.getKey();
+ 
+  if (customKey){ // if a button is pressed
+    Serial.println(customKey);
+  }
 }
