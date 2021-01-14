@@ -4,6 +4,8 @@
  int buzzer = 10;
 const byte ROWS = 4;
 const byte COLS = 4;
+const byte PassLength = 4;
+char password[PassLength] = {'0','0','0','0',};
  
 char buttons[ROWS][COLS] = {
   {'1', '2', '3', 'A'},
@@ -25,26 +27,64 @@ int tones[ROWS][COLS] = {
  
 Keypad customKeypad = Keypad(makeKeymap(buttons), rowPins, colPins, ROWS, COLS);
  
+int unlockMode(){
+    char customKey = customKeypad.getKey();
+    Serial.println("Unlock Mode: Type Password To Continue");
+    delay(500);
+
+    for(int i = 0; i<PassLength; i++){
+        while(!(customKey = customKeypad.getKey())) {
+            //do nothing
+        }
+        if(password[i] != customKey){
+            Serial.println("WRONG PASSWORD");
+            Serial.println(customKey);
+            return -1;
+        }
+        Serial.print("*");
+    }
+    Serial.print("");
+    Serial.println("Device Unlocked!");
+    return 0;
+}
+
 void setup(){
-  Serial.begin(9600); // Begin monitoring via the serial monitor
+  Serial.begin(9600);
+  Serial.println("Press * to set a new password OR # to access the system");
 }
  
 void loop(){
-    int toneFreq = 0;
     char customKey = customKeypad.getKey();
-    if (customKey) { //if a button is pressed
-    Serial.print(customKey);
-    Serial.print(": ");
-    for (byte j=0; j<ROWS; j++) {
-        for (byte i=0; i<COLS; i++) {
-            if (customKey == buttons[j][i]) {
-                toneFreq=tones[j][i];
-                break;
+    if(customKey == '*'){
+        int access = unlockMode();
+
+        if(access < 0){
+            Serial.println("Access Denied. Can not change password without the old one or the default.");
+
+        } else {
+            Serial.println("Welcome, authorized user, please enter a new password!");
+            delay(500);
+
+            for(int i = 0; i<PassLength; i++){
+                while(!(customKey = customKeypad.getKey())) {
+                    //do nothing
+                }
+                password[i] = customKey;
+                Serial.print("*");
             }
+            Serial.println("");
+            Serial.println("Password Succeddfully Changed.");
         }
+
     }
-    tone(buzzer, toneFreq, 500);
-    delay(200);
-    noTone(buzzer);
-    }
+
+    if(customKey == '#'){
+        int access = unlockMode();
+        if(access < 0){
+            Serial.println("Access Denied.");
+        }else{
+            Serial.println("Welcome, authorized user, you may now begin using the system.");
+        }
+    } 
+
 }
