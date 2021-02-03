@@ -89,21 +89,21 @@ void loop() {
   display.showNumberDec(counter);
   delay(50);
  
-  if(counter == 50) {
+  if(counter == 23) {
     display.setSegments(data);
     delay(3000);
     display.clear();
     counter += 5;
   }
  
- if(counter == 75) {
+ if(counter == 353) {
     display.setSegments(data);
     delay(3000);
     display.clear();
     counter += 5;
   }
  
-  if(counter == 100) {
+  if(counter == 1688) {
     display.setSegments(done);
     delay(1000000);
   }
